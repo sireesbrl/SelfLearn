@@ -1,0 +1,28 @@
+{% extends "loginsystem/layout.html" %}
+
+{% block body %}
+    <div class="container">
+        <div class="container text-center">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg" alt="Profile Picture" width="100" height="100">
+        </div>
+        <h1 class="text-center">{{ username }}</h1>
+    </div>
+
+    <div class ="container">
+        <h2>My Courses</h2>
+        <div class="row">
+            {% for course in courses %}
+                <div class="card" style="width: 100%">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'resume' course=course.name %}" class="btn btn-outline-success resume">Resume</a>
+                            <a href="{% url 'unenroll' course=course.name %}" class="btn btn-outline-danger unenroll">Unenroll</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}

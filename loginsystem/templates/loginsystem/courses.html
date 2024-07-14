@@ -1,0 +1,41 @@
+{% extends "loginsystem/layout.html" %}
+
+{% block body %}
+
+    <div class ="container">
+        {% comment %} To be added when there are a lot of courses available {% endcomment %}
+        {% comment %} <div class="container d-flex justify-content-end">
+            <form class="d-flex" method="POST" action="{% url 'search' %}">
+                {% csrf_token %}
+                <input disabled class="form-control" name="search" type="search" placeholder="Search Courses" aria-label="Search">
+                <button disabled class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div> {% endcomment %}
+        <h2>Courses</h2>
+        <div class="row">
+            {% for course in courses %}
+                <div class="card" style="width: 100%">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ course.name }}</h5>
+                    <p class="card-text">{{ course.description }}</p>
+                    {% if course in enrolled %}
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'resume' course=course.name %}" class="btn btn-outline-success">Resume</a>
+                            <a href="{% url 'unenroll' course=course.name %}" class="btn btn-outline-danger">Unenroll</a>
+                        </div>
+                    {% else %}
+                        <div class="d-flex justify-content-end">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'enroll' course=course.name %}" class="btn btn-outline-success">Enroll</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-outline-success">Enroll</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endblock %}

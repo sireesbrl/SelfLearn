@@ -1,0 +1,47 @@
+{% extends 'courses/layout.html' %}
+{% load static %}
+
+{% block static %}
+    <script src="{% static 'courses/course.js' %}"></script>
+{% endblock  %}
+
+{% block sidebar %}
+    <div class="my-3" style="hyphens: auto;">
+        <ul style="list-style-type: none;">
+            <li><a href="{% url 'resume' course=course %}">Introduction</a></li>
+        </ul>
+            
+        {% for chapter in  chapters %}
+            <ul style="list-style-type: none;">
+                <li>
+                    <a href="{% url 'chapter' course=course.name chapter=chapter.name %}">
+                        {{ chapter.name }}
+                    </a>
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <h1 id="course" hidden>{{ course }}</h1>
+        <h1 id="chapter">{{ chapter.name }}</h1>
+        {% if request.user in completed_by %}
+            <form action="{% url 'mark_as_not_completed' course=course.name chapter=chapter.name %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-outline-danger completion" style="border: none;">
+                    Mark as Not-Completed
+                </button>
+            </form>
+        {% else %}
+            <form action="{% url 'mark_as_completed' course=course.name chapter=chapter.name %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-outline-success completion" style="border: none;">
+                    Mark as Completed
+                </button>
+            </form>
+        {% endif %}
+    </div>
+    {{ content | safe }}
+{% endblock %}
